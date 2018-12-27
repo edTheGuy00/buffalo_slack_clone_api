@@ -24,6 +24,8 @@ type User struct {
 	Password             string `json:"password" db:"-"`
 	PasswordConfirmation string `json:"password_confirmation" db:"-"`
 
+	JwtToken string `json:"token" db:"-"`
+
 	//Extra fields
 
 	FirstName string `json:"first_name" db:"first_name"`
