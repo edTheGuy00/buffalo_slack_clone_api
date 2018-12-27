@@ -60,6 +60,7 @@ func App() *buffalo.App {
 		app.DELETE("/signout", AuthDestroy)
 		app.Middleware.Skip(Authorize, HomeHandler, UsersCreate, AuthCreate)
 		app.GET("/", HomeHandler)
+		app.Resource("/teams", TeamsResource{})
 	}
 
 	return app
