@@ -19,10 +19,15 @@ func UsersCreate(c buffalo.Context) error {
 	if err != nil {
 		return errors.WithStack(err)
 	}
-
 	if verrs.HasAny() {
 		return c.Render(406, r.JSON(verrs))
 	}
+
+	token, err := AuthCreateToken(u)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+	u.JwtToken = token
 
 	return c.Render(200, r.JSON(u))
 }

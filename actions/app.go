@@ -7,6 +7,8 @@ import (
 	paramlogger "github.com/gobuffalo/mw-paramlogger"
 	"github.com/unrolled/secure"
 
+	"github.com/gobuffalo/mw-tokenauth"
+
 	"github.com/edTheGuy00/slack_clone_backend/models"
 	"github.com/gobuffalo/buffalo-pop/pop/popmw"
 	contenttype "github.com/gobuffalo/mw-contenttype"
@@ -54,12 +56,16 @@ func App() *buffalo.App {
 		// Remove to disable this.
 		app.Use(popmw.Transaction(models.DB))
 
+		app.Use(tokenauth.New(tokenauth.Options{}))
+
 		app.Use(Authorize)
-		app.POST("/users", UsersCreate)
-		app.POST("/signin", AuthCreate)
+
 		app.DELETE("/signout", AuthDestroy)
 		app.Middleware.Skip(Authorize, HomeHandler, UsersCreate, AuthCreate)
+		app.Middleware.Skip(tokenauth.New(tokenauth.Options{}), HomeHandler, UsersCreate, AuthCreate)
 		app.GET("/", HomeHandler)
+		app.POST("/users", UsersCreate)
+		app.POST("/signin", AuthCreate)
 		app.Resource("/teams", TeamsResource{})
 	}
 

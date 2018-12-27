@@ -2,10 +2,14 @@ package actions
 
 import (
 	"database/sql"
+	"log"
 	"strings"
+	"time"
 
+	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/edTheGuy00/slack_clone_backend/models"
 	"github.com/gobuffalo/buffalo"
+	"github.com/gobuffalo/mw-tokenauth"
 	"github.com/gobuffalo/pop"
 	"github.com/gobuffalo/validate"
 	"github.com/pkg/errors"
@@ -55,6 +59,19 @@ func AuthCreate(c buffalo.Context) error {
 	}
 
 	return c.Redirect(302, redirectURL)
+}
+
+// AuthCreateToken creates a new token for the user
+func AuthCreateToken(u *models.User) (string, error) {
+	claims := jwt.MapClaims{}
+	claims["userid"] = u.ID
+	claims["exp"] = time.Now().Add(time.Minute * 5000).Unix()
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	key, err := tokenauth.GetHMACKey(jwt.SigningMethodHS256)
+	if err != nil {
+		log.Fatal(errors.Wrap(err, "couldn't get key"))
+	}
+	return token.SignedString(key)
 }
 
 // AuthDestroy clears the session and logs a user out
