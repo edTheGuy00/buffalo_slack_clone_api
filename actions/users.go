@@ -21,15 +21,10 @@ func UsersCreate(c buffalo.Context) error {
 	}
 
 	if verrs.HasAny() {
-		c.Set("user", u)
-		c.Set("errors", verrs)
-		return c.Render(200, r.HTML("users/new.html"))
+		return c.Render(406, r.JSON(verrs))
 	}
 
-	c.Session().Set("current_user_id", u.ID)
-	c.Flash().Add("success", "Welcome to Buffalo!")
-
-	return c.Redirect(302, "/")
+	return c.Render(200, r.JSON(u))
 }
 
 // Authorize require a user be logged in before accessing a route
