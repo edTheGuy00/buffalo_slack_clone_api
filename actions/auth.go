@@ -12,12 +12,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// AuthNew loads the signin page
-func AuthNew(c buffalo.Context) error {
-	c.Set("user", models.User{})
-	return c.Render(200, r.HTML("auth/new.html"))
-}
-
 // AuthCreate attempts to log the user in with an existing account.
 func AuthCreate(c buffalo.Context) error {
 	u := &models.User{}
