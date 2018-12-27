@@ -35,17 +35,17 @@ func UsersCreate(c buffalo.Context) error {
 // Authorize require a user be logged in before accessing a route
 func Authorize(next buffalo.Handler) buffalo.Handler {
 	return func(c buffalo.Context) error {
-		if uid := c.Session().Get("current_user_id"); uid == nil {
-			c.Session().Set("redirectURL", c.Request().URL.String())
+		// if uid := c.Session().Get("current_user_id"); uid == nil {
+		// 	c.Session().Set("redirectURL", c.Request().URL.String())
 
-			err := c.Session().Save()
-			if err != nil {
-				return errors.WithStack(err)
-			}
+		// 	err := c.Session().Save()
+		// 	if err != nil {
+		// 		return errors.WithStack(err)
+		// 	}
 
-			c.Flash().Add("danger", "You must be authorized to see that page")
-			return c.Redirect(302, "/")
-		}
+		// 	c.Flash().Add("danger", "You must be authorized to see that page")
+		// 	return c.Redirect(302, "/")
+		// }
 		return next(c)
 	}
 }

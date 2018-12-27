@@ -74,6 +74,12 @@ func AuthCreateToken(u *models.User) (string, error) {
 	return token.SignedString(key)
 }
 
+// AuthGetUserID get the userId from the header token
+func AuthGetUserID(c buffalo.Context) string {
+	claims := c.Value("claims").(jwt.MapClaims)
+	return claims["userid"].(string)
+}
+
 // AuthDestroy clears the session and logs a user out
 func AuthDestroy(c buffalo.Context) error {
 	c.Session().Clear()

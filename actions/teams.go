@@ -4,6 +4,7 @@ import (
 	"github.com/edTheGuy00/slack_clone_backend/models"
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/pop"
+	"github.com/gofrs/uuid"
 	"github.com/pkg/errors"
 )
 
@@ -28,6 +29,8 @@ type TeamsResource struct {
 // GET /teams
 func (v TeamsResource) List(c buffalo.Context) error {
 	// Get the DB connection from the context
+
+	userID := AuthGetUserID(c)
 	tx, ok := c.Value("tx").(*pop.Connection)
 	if !ok {
 		return errors.WithStack(errors.New("no transaction found"))
@@ -40,7 +43,7 @@ func (v TeamsResource) List(c buffalo.Context) error {
 	q := tx.PaginateFromParams(c.Params())
 
 	// Retrieve all Teams from the DB
-	if err := q.All(teams); err != nil {
+	if err := q.Where("owner = ?", userID).All(teams); err != nil {
 		return errors.WithStack(err)
 	}
 
@@ -92,6 +95,15 @@ func (v TeamsResource) Create(c buffalo.Context) error {
 	if !ok {
 		return errors.WithStack(errors.New("no transaction found"))
 	}
+
+	userID := AuthGetUserID(c)
+
+	uid, err2 := uuid.FromString(userID)
+	if err2 != nil {
+		return errors.WithStack(err2)
+	}
+
+	team.Owner = uid
 
 	// Validate the data from the html form
 	verrs, err := tx.ValidateAndCreate(team)
