@@ -10,7 +10,6 @@ import (
 	"github.com/edTheGuy00/slack_clone_backend/models"
 	"github.com/gobuffalo/buffalo-pop/pop/popmw"
 	contenttype "github.com/gobuffalo/mw-contenttype"
-	"github.com/gobuffalo/x/sessions"
 	"github.com/rs/cors"
 )
 
@@ -35,12 +34,10 @@ var app *buffalo.App
 func App() *buffalo.App {
 	if app == nil {
 		app = buffalo.New(buffalo.Options{
-			Env:          ENV,
-			SessionStore: sessions.Null{},
+			Env: ENV,
 			PreWares: []buffalo.PreWare{
 				cors.Default().Handler,
 			},
-			SessionName: "_slack_clone_backend_session",
 		})
 
 		// Automatically redirect to SSL
@@ -58,15 +55,6 @@ func App() *buffalo.App {
 		app.Use(popmw.Transaction(models.DB))
 
 		app.GET("/", HomeHandler)
-		app.Use(SetCurrentUser)
-		app.Use(Authorize)
-		app.GET("/users/new", UsersNew)
-		app.POST("/users", UsersCreate)
-		app.GET("/signin", AuthNew)
-		app.POST("/signin", AuthCreate)
-		app.DELETE("/signout", AuthDestroy)
-		app.Middleware.Skip(Authorize, HomeHandler, UsersNew, UsersCreate, AuthNew, AuthCreate)
-
 	}
 
 	return app
