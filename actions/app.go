@@ -59,10 +59,10 @@ func App() *buffalo.App {
 		app.Use(tokenauth.New(tokenauth.Options{}))
 
 		app.DELETE("/signout", AuthDestroy)
-		app.Middleware.Skip(tokenauth.New(tokenauth.Options{}), HomeHandler, UsersCreate, AuthCreate)
 		app.GET("/", HomeHandler)
 		app.POST("/users", UsersCreate)
 		app.POST("/signin", AuthCreate)
+		app.Middleware.Skip(tokenauth.New(tokenauth.Options{}), HomeHandler, UsersCreate, AuthCreate)
 		app.Resource("/teams", TeamsResource{})
 	}
 
