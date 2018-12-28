@@ -34,6 +34,22 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
+-- Name: channels; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.channels (
+    id uuid NOT NULL,
+    name character varying(255) NOT NULL,
+    team_id uuid NOT NULL,
+    public boolean NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.channels OWNER TO postgres;
+
+--
 -- Name: schema_migration; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -92,6 +108,14 @@ CREATE TABLE public.users (
 
 
 ALTER TABLE public.users OWNER TO postgres;
+
+--
+-- Name: channels channels_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.channels
+    ADD CONSTRAINT channels_pkey PRIMARY KEY (id);
+
 
 --
 -- Name: team_members team_members_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
