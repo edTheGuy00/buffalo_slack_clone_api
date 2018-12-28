@@ -33,6 +33,9 @@ type User struct {
 	LastName string `json:"last_name" db:"last_name"`
 
 	UserName string `json:"user_name" db:"user_name"`
+
+	//Associations
+	Teams Teams `many_to_many:"team_members" db:"-"`
 }
 
 // Create wraps up the pattern of encrypting the password and
