@@ -96,15 +96,6 @@ func (v TeamsResource) Create(c buffalo.Context) error {
 		return errors.WithStack(errors.New("no transaction found"))
 	}
 
-	userID := AuthGetUserID(c)
-
-	uid, err2 := uuid.FromString(userID)
-	if err2 != nil {
-		return errors.WithStack(err2)
-	}
-
-	team.Owner = uid
-
 	// Validate the data from the html form
 	verrs, err := tx.ValidateAndCreate(team)
 	if err != nil {
@@ -120,8 +111,20 @@ func (v TeamsResource) Create(c buffalo.Context) error {
 		return c.Render(422, r.Auto(c, team))
 	}
 
-	// If there are no errors set a success message
-	c.Flash().Add("success", "Team was created successfully")
+	userID := AuthGetUserID(c)
+
+	uid, err2 := uuid.FromString(userID)
+	if err2 != nil {
+		return errors.WithStack(err2)
+	}
+
+	teamMember := &models.TeamMember{
+		MemberID: uid,
+		TeamID:   team.ID,
+		Admin:    true,
+	}
+
+	tx.Create(teamMember)
 
 	// and redirect to the teams index page
 	return c.Render(201, r.Auto(c, team))
