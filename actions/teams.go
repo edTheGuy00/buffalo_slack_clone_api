@@ -119,12 +119,14 @@ func (v TeamsResource) Create(c buffalo.Context) error {
 	}
 
 	teamMember := &models.TeamMember{
-		MemberID: uid,
-		TeamID:   team.ID,
-		Admin:    true,
+		UserID: uid,
+		TeamID: team.ID,
+		Admin:  true,
 	}
 
-	tx.Create(teamMember)
+	if err := tx.Create(teamMember); err != nil {
+		return errors.WithStack(err)
+	}
 
 	// and redirect to the teams index page
 	return c.Render(201, r.Auto(c, team))

@@ -14,7 +14,7 @@ type TeamMember struct {
 	CreatedAt time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
 	TeamID    uuid.UUID `json:"team_id" db:"team_id"`
-	MemberID  uuid.UUID `json:"member_id" db:"user_id"`
+	UserID    uuid.UUID `json:"user_id" db:"user_id"`
 	Admin     bool      `json:"admin" db:"admin"`
 	User      User      `belongs_to:"users" db:"-"`
 	Team      Team      `belongs_to:"teams" db:"-"`
