@@ -3,4 +3,5 @@ create_table("channels") {
 	t.Column("name", "string", {})
 	t.Column("team_id", "uuid", {})
 	t.Column("public", "bool", {})
+	t.ForeignKey("team_id", {"teams": ["id"]}, {})
 }

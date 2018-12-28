@@ -17,7 +17,7 @@ type Team struct {
 	Name      string    `json:"name" db:"name"`
 	Member    uuid.UUID `json:"-" db:"member"`
 	Members   Users     `many_to_many:"members" db:"-"`
-	Channels  Channels  `has_many:"channels" json:"channels" db:"-"`
+	Channels  Channels  `has_many:"channels" json:"channels"`
 }
 
 // String is not required by pop and may be deleted

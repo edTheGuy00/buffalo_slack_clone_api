@@ -40,7 +40,7 @@ func (v ChannelsResource) List(c buffalo.Context) error {
 	q := tx.PaginateFromParams(c.Params())
 
 	// Retrieve all Channels from the DB
-	if err := q.All(channels); err != nil {
+	if err := q.Eager().All(channels); err != nil {
 		return errors.WithStack(err)
 	}
 
