@@ -1,0 +1,6 @@
+create_table("channels") {
+	t.Column("id", "uuid", {primary: true})
+	t.Column("name", "string", {})
+	t.Column("team_id", "uuid", {})
+	t.Column("public", "bool", {})
+}
