@@ -30,11 +30,9 @@ func AuthCreate(c buffalo.Context) error {
 
 	// helper function to handle bad attempts
 	bad := func() error {
-		c.Set("user", u)
 		verrs := validate.NewErrors()
 		verrs.Add("email", "invalid email/password")
-		c.Set("errors", verrs)
-		return c.Render(422, r.HTML("auth/new.html"))
+		return c.Render(422, r.JSON(verrs))
 	}
 
 	if err != nil {
@@ -50,15 +48,14 @@ func AuthCreate(c buffalo.Context) error {
 	if err != nil {
 		return bad()
 	}
-	c.Session().Set("current_user_id", u.ID)
-	c.Flash().Add("success", "Welcome Back to Buffalo!")
 
-	redirectURL := "/"
-	if redir, ok := c.Session().Get("redirectURL").(string); ok {
-		redirectURL = redir
+	token, err := AuthCreateToken(u)
+	if err != nil {
+		return errors.WithStack(err)
 	}
+	u.JwtToken = token
 
-	return c.Redirect(302, redirectURL)
+	return c.Render(200, r.JSON(u))
 }
 
 // AuthCreateToken creates a new token for the user
