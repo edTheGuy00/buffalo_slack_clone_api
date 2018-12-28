@@ -30,27 +30,27 @@ type TeamsResource struct {
 func (v TeamsResource) List(c buffalo.Context) error {
 	// Get the DB connection from the context
 
-	userID := AuthGetUserID(c)
+	//userID := AuthGetUserID(c)
 	tx, ok := c.Value("tx").(*pop.Connection)
 	if !ok {
 		return errors.WithStack(errors.New("no transaction found"))
 	}
 
-	teams := &models.Teams{}
+	user := &models.User{}
 
 	// Paginate results. Params "page" and "per_page" control pagination.
 	// Default values are "page=1" and "per_page=20".
 	q := tx.PaginateFromParams(c.Params())
 
 	// Retrieve all Teams from the DB
-	if err := q.Where("owner = ?", userID).All(teams); err != nil {
+	if err := q.Eager().First(user); err != nil {
 		return errors.WithStack(err)
 	}
 
 	// Add the paginator to the context so it can be used in the template.
 	c.Set("pagination", q.Paginator)
 
-	return c.Render(200, r.Auto(c, teams))
+	return c.Render(200, r.Auto(c, user.Teams))
 }
 
 // Show gets the data for one Team. This function is mapped to

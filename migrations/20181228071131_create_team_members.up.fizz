@@ -1,6 +1,6 @@
 create_table("team_members") {
 	t.Column("id", "uuid", {primary: true})
 	t.Column("team_id", "uuid", {})
-	t.Column("member_id", "uuid", {})
+	t.Column("user_id", "uuid", {})
 	t.Column("admin", "bool", {})
 }

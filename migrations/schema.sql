@@ -51,7 +51,7 @@ ALTER TABLE public.schema_migration OWNER TO postgres;
 CREATE TABLE public.team_members (
     id uuid NOT NULL,
     team_id uuid NOT NULL,
-    member_id uuid NOT NULL,
+    user_id uuid NOT NULL,
     admin boolean NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
