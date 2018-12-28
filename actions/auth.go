@@ -9,7 +9,7 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/edTheGuy00/slack_clone_backend/models"
 	"github.com/gobuffalo/buffalo"
-	"github.com/gobuffalo/mw-tokenauth"
+	tokenauth "github.com/gobuffalo/mw-tokenauth"
 	"github.com/gobuffalo/pop"
 	"github.com/gobuffalo/validate"
 	"github.com/pkg/errors"

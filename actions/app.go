@@ -7,7 +7,7 @@ import (
 	paramlogger "github.com/gobuffalo/mw-paramlogger"
 	"github.com/unrolled/secure"
 
-	"github.com/gobuffalo/mw-tokenauth"
+	tokenauth "github.com/gobuffalo/mw-tokenauth"
 
 	"github.com/edTheGuy00/slack_clone_backend/models"
 	"github.com/gobuffalo/buffalo-pop/pop/popmw"
@@ -64,6 +64,7 @@ func App() *buffalo.App {
 		app.POST("/signin", AuthCreate)
 		app.Middleware.Skip(tokenauth.New(tokenauth.Options{}), HomeHandler, UsersCreate, AuthCreate)
 		app.Resource("/teams", TeamsResource{})
+		app.Resource("/team_members", TeamMembersResource{})
 	}
 
 	return app
