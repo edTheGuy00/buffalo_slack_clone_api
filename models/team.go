@@ -15,7 +15,8 @@ type Team struct {
 	CreatedAt time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
 	Name      string    `json:"name" db:"name"`
-	Owner     uuid.UUID `json:"-" db:"owner"`
+	Member    uuid.UUID `json:"-" db:"member"`
+	Members   Users     `many_to_many:"members" db:"-"`
 }
 
 // String is not required by pop and may be deleted

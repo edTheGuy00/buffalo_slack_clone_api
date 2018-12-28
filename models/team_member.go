@@ -16,6 +16,8 @@ type TeamMember struct {
 	TeamID    uuid.UUID `json:"team_id" db:"team_id"`
 	MemberID  uuid.UUID `json:"member_id" db:"member_id"`
 	Admin     bool      `json:"admin" db:"admin"`
+	User      User      `belongs_to:"users" db:"-"`
+	Team      Team      `belongs_to:"teams" db:"-"`
 }
 
 // String is not required by pop and may be deleted
