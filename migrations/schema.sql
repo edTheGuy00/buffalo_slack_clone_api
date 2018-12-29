@@ -83,7 +83,6 @@ ALTER TABLE public.team_members OWNER TO postgres;
 CREATE TABLE public.teams (
     id uuid NOT NULL,
     name character varying(255) NOT NULL,
-    member uuid NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
