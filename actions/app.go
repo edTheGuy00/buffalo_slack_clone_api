@@ -65,7 +65,7 @@ func App() *buffalo.App {
 		app.Middleware.Skip(tokenauth.New(tokenauth.Options{}), HomeHandler, UsersCreate, AuthCreate)
 		app.Resource("/teams", TeamsResource{})
 		app.Resource("/team_members", TeamMembersResource{})
-		app.Resource("/channels", ChannelsResource{})
+		app.Resource("/{team_id}/channels", ChannelsResource{})
 	}
 
 	return app

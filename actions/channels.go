@@ -4,6 +4,7 @@ import (
 	"github.com/edTheGuy00/slack_clone_backend/models"
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/pop"
+	"github.com/gofrs/uuid"
 	"github.com/pkg/errors"
 )
 
@@ -40,7 +41,7 @@ func (v ChannelsResource) List(c buffalo.Context) error {
 	q := tx.PaginateFromParams(c.Params())
 
 	// Retrieve all Channels from the DB
-	if err := q.Eager().All(channels); err != nil {
+	if err := q.Eager().Where("team_id = ?", c.Param("team_id")).All(channels); err != nil {
 		return errors.WithStack(err)
 	}
 
@@ -92,6 +93,13 @@ func (v ChannelsResource) Create(c buffalo.Context) error {
 	if !ok {
 		return errors.WithStack(errors.New("no transaction found"))
 	}
+
+	teamID, err2 := uuid.FromString(c.Param("team_id"))
+	if err2 != nil {
+		return errors.WithStack(err2)
+	}
+
+	channel.TeamID = teamID
 
 	// Validate the data from the html form
 	verrs, err := tx.ValidateAndCreate(channel)
