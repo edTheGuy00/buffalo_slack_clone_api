@@ -30,7 +30,7 @@ type TeamsResource struct {
 func (v TeamsResource) List(c buffalo.Context) error {
 	// Get the DB connection from the context
 
-	//userID := AuthGetUserID(c)
+	userID := AuthGetUserID(c)
 	tx, ok := c.Value("tx").(*pop.Connection)
 	if !ok {
 		return errors.WithStack(errors.New("no transaction found"))
@@ -42,8 +42,8 @@ func (v TeamsResource) List(c buffalo.Context) error {
 	// Default values are "page=1" and "per_page=20".
 	q := tx.PaginateFromParams(c.Params())
 
-	// Retrieve all Teams from the DB
-	if err := q.Eager().First(user); err != nil {
+	// Retrieve all Teams from the DB for the user
+	if err := q.Eager().Find(user, userID); err != nil {
 		return errors.WithStack(err)
 	}
 
