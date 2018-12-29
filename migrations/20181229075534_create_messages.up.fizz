@@ -1,0 +1,8 @@
+create_table("messages") {
+	t.Column("id", "uuid", {primary: true})
+	t.Column("message", "text", {})
+	t.Column("channel_id", "uuid", {})
+	t.Column("user_id", "uuid", {})
+	t.ForeignKey("channel_id", {"channels": ["id"]}, {})
+	t.ForeignKey("user_id", {"users": ["id"]}, {})
+}
