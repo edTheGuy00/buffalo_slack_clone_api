@@ -18,6 +18,7 @@ type Channel struct {
 	TeamID    uuid.UUID `json:"team_id" db:"team_id"`
 	Public    bool      `json:"public" db:"public"`
 	Team      *Team     `belongs_to:"team" db:"-"`
+	Messages  Messages  `json:"messages" has_many:"messages"`
 }
 
 // String is not required by pop and may be deleted

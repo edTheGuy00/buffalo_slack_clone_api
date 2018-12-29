@@ -17,8 +17,8 @@ type Message struct {
 	Message   string    `json:"message" db:"message"`
 	ChannelID uuid.UUID `db:"channel_id"`
 	UserID    uuid.UUID `db:"user_id"`
-	Channel   Channel   `json:"channel" belongs_to:"channel"`
-	User      User      `json:"user" belongs_to:"user"`
+	Channel   *Channel  `json:"channel" belongs_to:"channel"`
+	User      *User     `json:"user" belongs_to:"user"`
 }
 
 // String is not required by pop and may be deleted
