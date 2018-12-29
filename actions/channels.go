@@ -41,7 +41,7 @@ func (v ChannelsResource) List(c buffalo.Context) error {
 	q := tx.PaginateFromParams(c.Params())
 
 	// Retrieve all Channels from the DB
-	if err := q.Eager().Where("team_id = ?", c.Param("team_id")).All(channels); err != nil {
+	if err := q.Where("team_id = ?", c.Param("team_id")).All(channels); err != nil {
 		return errors.WithStack(err)
 	}
 
@@ -64,7 +64,7 @@ func (v ChannelsResource) Show(c buffalo.Context) error {
 	channel := &models.Channel{}
 
 	// To find the Channel the parameter channel_id is used.
-	if err := tx.Find(channel, c.Param("channel_id")); err != nil {
+	if err := tx.Eager("Messages").Find(channel, c.Param("channel_id")); err != nil {
 		return c.Error(404, err)
 	}
 
