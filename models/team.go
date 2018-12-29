@@ -15,8 +15,7 @@ type Team struct {
 	CreatedAt time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
 	Name      string    `json:"name" db:"name"`
-	Member    uuid.UUID `json:"-" db:"member"`
-	Users     Users     `many_to_many:"users" db:"-"`
+	Users     Users     `many_to_many:"team_members" db:"-"`
 	Channels  Channels  `has_many:"channels" json:"channels"`
 }
 
