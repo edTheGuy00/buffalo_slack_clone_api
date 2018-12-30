@@ -66,7 +66,7 @@ func App() *buffalo.App {
 		app.Resource("/teams", TeamsResource{})
 		app.Resource("/team_members", TeamMembersResource{})
 		app.Resource("/{team_id}/channels", ChannelsResource{})
-		app.Resource("/messages", MessagesResource{})
+		app.Resource("/{team_id}/{channel_id}/messages", MessagesResource{})
 	}
 
 	return app

@@ -4,6 +4,7 @@ import (
 	"github.com/edTheGuy00/slack_clone_backend/models"
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/pop"
+	"github.com/gofrs/uuid"
 	"github.com/pkg/errors"
 )
 
@@ -93,6 +94,20 @@ func (v MessagesResource) Create(c buffalo.Context) error {
 		return errors.WithStack(errors.New("no transaction found"))
 	}
 
+	channelID, err := uuid.FromString(c.Param("channel_id"))
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	uid := AuthGetUserID(c)
+	userID, err := uuid.FromString(uid)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	message.ChannelID = channelID
+	message.UserID = userID
+
 	// Validate the data from the html form
 	verrs, err := tx.ValidateAndCreate(message)
 	if err != nil {
@@ -107,9 +122,6 @@ func (v MessagesResource) Create(c buffalo.Context) error {
 		// correct the input.
 		return c.Render(422, r.Auto(c, message))
 	}
-
-	// If there are no errors set a success message
-	c.Flash().Add("success", "Message was created successfully")
 
 	// and redirect to the messages index page
 	return c.Render(201, r.Auto(c, message))
