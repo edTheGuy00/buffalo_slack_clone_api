@@ -40,7 +40,7 @@ func (v TeamMembersResource) List(c buffalo.Context) error {
 	q := tx.PaginateFromParams(c.Params())
 
 	// Retrieve all TeamMembers from the DB
-	if err := q.All(teamMembers); err != nil {
+	if err := q.Eager("User").Where("team_id = ?", c.Param("team_id")).All(teamMembers); err != nil {
 		return errors.WithStack(err)
 	}
 
