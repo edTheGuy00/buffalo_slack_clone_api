@@ -58,13 +58,13 @@ func App() *buffalo.App {
 
 		app.Use(tokenauth.New(tokenauth.Options{}))
 
-		app.DELETE("/signout", AuthDestroy)
 		app.GET("/", HomeHandler)
-		app.POST("/users", UsersCreate)
 		app.POST("/signin", AuthCreate)
+		app.DELETE("/signout", AuthDestroy)
+		app.POST("/users", UsersCreate)
 		app.Middleware.Skip(tokenauth.New(tokenauth.Options{}), HomeHandler, UsersCreate, AuthCreate)
 		app.Resource("/teams", TeamsResource{})
-		app.Resource("/team_members", TeamMembersResource{})
+		app.Resource("/{team_id}/team_members", TeamMembersResource{})
 		app.Resource("/{team_id}/channels", ChannelsResource{})
 		app.Resource("/{team_id}/{channel_id}/messages", MessagesResource{})
 	}
