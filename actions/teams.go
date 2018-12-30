@@ -73,12 +73,6 @@ func (v TeamsResource) Show(c buffalo.Context) error {
 	return c.Render(200, r.Auto(c, team))
 }
 
-// New renders the form for creating a new Team.
-// This function is mapped to the path GET /teams/new
-func (v TeamsResource) New(c buffalo.Context) error {
-	return c.Render(200, r.Auto(c, &models.Team{}))
-}
-
 // Create adds a Team to the DB. This function is mapped to the
 // path POST /teams
 func (v TeamsResource) Create(c buffalo.Context) error {
@@ -132,25 +126,6 @@ func (v TeamsResource) Create(c buffalo.Context) error {
 	return c.Render(201, r.Auto(c, team))
 }
 
-// Edit renders a edit form for a Team. This function is
-// mapped to the path GET /teams/{team_id}/edit
-func (v TeamsResource) Edit(c buffalo.Context) error {
-	// Get the DB connection from the context
-	tx, ok := c.Value("tx").(*pop.Connection)
-	if !ok {
-		return errors.WithStack(errors.New("no transaction found"))
-	}
-
-	// Allocate an empty Team
-	team := &models.Team{}
-
-	if err := tx.Find(team, c.Param("team_id")); err != nil {
-		return c.Error(404, err)
-	}
-
-	return c.Render(200, r.Auto(c, team))
-}
-
 // Update changes a Team in the DB. This function is mapped to
 // the path PUT /teams/{team_id}
 func (v TeamsResource) Update(c buffalo.Context) error {
@@ -178,16 +153,8 @@ func (v TeamsResource) Update(c buffalo.Context) error {
 	}
 
 	if verrs.HasAny() {
-		// Make the errors available inside the html template
-		c.Set("errors", verrs)
-
-		// Render again the edit.html template that the user can
-		// correct the input.
-		return c.Render(422, r.Auto(c, team))
+		return c.Render(422, r.Auto(c, verrs))
 	}
-
-	// If there are no errors set a success message
-	c.Flash().Add("success", "Team was updated successfully")
 
 	// and redirect to the teams index page
 	return c.Render(200, r.Auto(c, team))
