@@ -41,7 +41,7 @@ func (v MessagesResource) List(c buffalo.Context) error {
 	q := tx.PaginateFromParams(c.Params())
 
 	// Retrieve all Messages from the DB
-	if err := q.All(messages); err != nil {
+	if err := q.Eager("User").Where("channel_id = ?", c.Param("channel_id")).All(messages); err != nil {
 		return errors.WithStack(err)
 	}
 
