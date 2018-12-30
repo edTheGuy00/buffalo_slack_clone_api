@@ -70,12 +70,6 @@ func (v TeamMembersResource) Show(c buffalo.Context) error {
 	return c.Render(200, r.Auto(c, teamMember))
 }
 
-// New renders the form for creating a new TeamMember.
-// This function is mapped to the path GET /team_members/new
-func (v TeamMembersResource) New(c buffalo.Context) error {
-	return c.Render(200, r.Auto(c, &models.TeamMember{}))
-}
-
 // Create adds a TeamMember to the DB. This function is mapped to the
 // path POST /team_members
 func (v TeamMembersResource) Create(c buffalo.Context) error {
@@ -113,25 +107,6 @@ func (v TeamMembersResource) Create(c buffalo.Context) error {
 
 	// and redirect to the team_members index page
 	return c.Render(201, r.Auto(c, teamMember))
-}
-
-// Edit renders a edit form for a TeamMember. This function is
-// mapped to the path GET /team_members/{team_member_id}/edit
-func (v TeamMembersResource) Edit(c buffalo.Context) error {
-	// Get the DB connection from the context
-	tx, ok := c.Value("tx").(*pop.Connection)
-	if !ok {
-		return errors.WithStack(errors.New("no transaction found"))
-	}
-
-	// Allocate an empty TeamMember
-	teamMember := &models.TeamMember{}
-
-	if err := tx.Find(teamMember, c.Param("team_member_id")); err != nil {
-		return c.Error(404, err)
-	}
-
-	return c.Render(200, r.Auto(c, teamMember))
 }
 
 // Update changes a TeamMember in the DB. This function is mapped to
