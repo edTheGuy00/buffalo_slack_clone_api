@@ -1,6 +1,7 @@
 package actions
 
 import (
+	"github.com/edTheGuy00/slack_clone_backend/actions/websocket"
 	"github.com/edTheGuy00/slack_clone_backend/models"
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/pop"
@@ -25,8 +26,18 @@ type MessagesResource struct {
 	buffalo.Resource
 }
 
-// List gets all Messages. This function is mapped to the path
-// GET /messages
+var hub *websocket.Hub
+
+func MessagesHandler(c buffalo.Context) error {
+
+	if hub == nil {
+		hub = websocket.NewHub()
+		go hub.Run()
+	}
+
+	return websocket.ServeWS(hub, c.Response(), c.Request())
+}
+
 func (v MessagesResource) List(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx, ok := c.Value("tx").(*pop.Connection)
@@ -49,32 +60,6 @@ func (v MessagesResource) List(c buffalo.Context) error {
 	c.Set("pagination", q.Paginator)
 
 	return c.Render(200, r.Auto(c, messages))
-}
-
-// Show gets the data for one Message. This function is mapped to
-// the path GET /messages/{message_id}
-func (v MessagesResource) Show(c buffalo.Context) error {
-	// Get the DB connection from the context
-	tx, ok := c.Value("tx").(*pop.Connection)
-	if !ok {
-		return errors.WithStack(errors.New("no transaction found"))
-	}
-
-	// Allocate an empty Message
-	message := &models.Message{}
-
-	// To find the Message the parameter message_id is used.
-	if err := tx.Find(message, c.Param("message_id")); err != nil {
-		return c.Error(404, err)
-	}
-
-	return c.Render(200, r.Auto(c, message))
-}
-
-// New renders the form for creating a new Message.
-// This function is mapped to the path GET /messages/new
-func (v MessagesResource) New(c buffalo.Context) error {
-	return c.Render(200, r.Auto(c, &models.Message{}))
 }
 
 // Create adds a Message to the DB. This function is mapped to the
@@ -125,67 +110,6 @@ func (v MessagesResource) Create(c buffalo.Context) error {
 
 	// and redirect to the messages index page
 	return c.Render(201, r.Auto(c, message))
-}
-
-// Edit renders a edit form for a Message. This function is
-// mapped to the path GET /messages/{message_id}/edit
-func (v MessagesResource) Edit(c buffalo.Context) error {
-	// Get the DB connection from the context
-	tx, ok := c.Value("tx").(*pop.Connection)
-	if !ok {
-		return errors.WithStack(errors.New("no transaction found"))
-	}
-
-	// Allocate an empty Message
-	message := &models.Message{}
-
-	if err := tx.Find(message, c.Param("message_id")); err != nil {
-		return c.Error(404, err)
-	}
-
-	return c.Render(200, r.Auto(c, message))
-}
-
-// Update changes a Message in the DB. This function is mapped to
-// the path PUT /messages/{message_id}
-func (v MessagesResource) Update(c buffalo.Context) error {
-	// Get the DB connection from the context
-	tx, ok := c.Value("tx").(*pop.Connection)
-	if !ok {
-		return errors.WithStack(errors.New("no transaction found"))
-	}
-
-	// Allocate an empty Message
-	message := &models.Message{}
-
-	if err := tx.Find(message, c.Param("message_id")); err != nil {
-		return c.Error(404, err)
-	}
-
-	// Bind Message to the html form elements
-	if err := c.Bind(message); err != nil {
-		return errors.WithStack(err)
-	}
-
-	verrs, err := tx.ValidateAndUpdate(message)
-	if err != nil {
-		return errors.WithStack(err)
-	}
-
-	if verrs.HasAny() {
-		// Make the errors available inside the html template
-		c.Set("errors", verrs)
-
-		// Render again the edit.html template that the user can
-		// correct the input.
-		return c.Render(422, r.Auto(c, message))
-	}
-
-	// If there are no errors set a success message
-	c.Flash().Add("success", "Message was updated successfully")
-
-	// and redirect to the messages index page
-	return c.Render(200, r.Auto(c, message))
 }
 
 // Destroy deletes a Message from the DB. This function is mapped
