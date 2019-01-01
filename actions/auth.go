@@ -62,7 +62,7 @@ func AuthCreate(c buffalo.Context) error {
 func AuthCreateToken(u *models.User) (string, error) {
 	claims := jwt.MapClaims{}
 	claims["userid"] = u.ID
-	claims["exp"] = time.Now().Add(time.Minute * 5000).Unix()
+	claims["exp"] = time.Now().Add(time.Minute * 50000).Unix()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	key, err := tokenauth.GetHMACKey(jwt.SigningMethodHS256)
 	if err != nil {
