@@ -28,6 +28,7 @@ type MessagesResource struct {
 
 var hub *websocket.Hub
 
+// MessagesHandler handles the websocket connection for messages
 func MessagesHandler(c buffalo.Context) error {
 
 	if hub == nil {
@@ -38,6 +39,7 @@ func MessagesHandler(c buffalo.Context) error {
 	return websocket.ServeWS(hub, c.Response(), c.Request())
 }
 
+// List gets the list of messages from the database
 func (v MessagesResource) List(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx, ok := c.Value("tx").(*pop.Connection)
