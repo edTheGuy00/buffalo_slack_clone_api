@@ -28,6 +28,8 @@ type MessagesResource struct {
 
 var hub *websocket.Hub
 
+var hubs *websocket.Hubs
+
 // MessagesHandler handles the websocket connection for messages
 func MessagesHandler(c buffalo.Context) error {
 

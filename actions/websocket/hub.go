@@ -16,6 +16,8 @@ type Hub struct {
 	unregister chan *Client
 }
 
+type Hubs []Hub
+
 // NewHub creates a new hub
 func NewHub() *Hub {
 	return &Hub{
