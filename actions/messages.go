@@ -26,19 +26,34 @@ type MessagesResource struct {
 	buffalo.Resource
 }
 
-var hub *websocket.Hub
-
-var hubs *websocket.Hubs
+var hubs = websocket.Hubs{}
 
 // MessagesHandler handles the websocket connection for messages
 func MessagesHandler(c buffalo.Context) error {
 
-	if hub == nil {
-		hub = websocket.NewHub()
-		go hub.Run()
+	channelID := c.Param("channel_id")
+
+	var currentHub websocket.Hub
+
+	if len(hubs) == 0 {
+		newHub := websocket.NewHub(channelID)
+		go newHub.Run()
+		currentHub = *newHub
+		hubs = append(hubs, *newHub)
+	} else {
+		for i := 0; i < len(hubs); i++ {
+			if hubs[i].ChannelID == channelID {
+				currentHub = hubs[i]
+			} else {
+				newHub := websocket.NewHub(channelID)
+				go newHub.Run()
+				currentHub = *newHub
+				hubs = append(hubs, *newHub)
+			}
+		}
 	}
 
-	return websocket.ServeWS(hub, c.Response(), c.Request())
+	return websocket.ServeWS(&currentHub, c.Response(), c.Request())
 }
 
 // List gets the list of messages from the database

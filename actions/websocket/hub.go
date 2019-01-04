@@ -14,17 +14,21 @@ type Hub struct {
 
 	// Unregister requests from clients.
 	unregister chan *Client
+
+	// id of the channel this hub belongs to
+	ChannelID string
 }
 
 type Hubs []Hub
 
 // NewHub creates a new hub
-func NewHub() *Hub {
+func NewHub(id string) *Hub {
 	return &Hub{
 		broadcast:  make(chan []byte),
 		register:   make(chan *Client),
 		unregister: make(chan *Client),
 		clients:    make(map[*Client]bool),
+		ChannelID:  id,
 	}
 }
 
