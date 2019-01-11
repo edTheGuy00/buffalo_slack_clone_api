@@ -1,7 +1,5 @@
 package models_test
 
-import "testing"
+func (ms *ModelSuite) Test_Team_Create() {
 
-func Test_Team(t *testing.T) {
-	t.Fatal("This test needs to be implemented!")
 }

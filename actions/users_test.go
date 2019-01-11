@@ -4,11 +4,6 @@ import (
 	"github.com/edTheGuy00/slack_clone_backend/models"
 )
 
-func (as *ActionSuite) Test_Users_New() {
-	res := as.HTML("/users/new").Get()
-	as.Equal(200, res.Code)
-}
-
 func (as *ActionSuite) Test_Users_Create() {
 	count, err := as.DB.Count("users")
 	as.NoError(err)
@@ -18,6 +13,9 @@ func (as *ActionSuite) Test_Users_Create() {
 		Email:                "mark@example.com",
 		Password:             "password",
 		PasswordConfirmation: "password",
+		FirstName:            "Mark",
+		LastName:             "Bates",
+		UserName:             "mb00",
 	}
 
 	res := as.HTML("/users").Post(u)
