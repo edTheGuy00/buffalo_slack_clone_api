@@ -1,6 +1,6 @@
 # This is a multi-stage Dockerfile and requires >= Docker 17.05
 # https://docs.docker.com/engine/userguide/eng-image/multistage-build/
-FROM gobuffalo/buffalo:v0.13.12 as builder
+FROM gobuffalo/buffalo:v0.14.0 as builder
 
 RUN mkdir -p $GOPATH/src/github.com/edTheGuy00/slack_clone_backend
 WORKDIR $GOPATH/src/github.com/edTheGuy00/slack_clone_backend

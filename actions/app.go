@@ -11,6 +11,7 @@ import (
 
 	"github.com/edTheGuy00/slack_clone_backend/models"
 	"github.com/gobuffalo/buffalo-pop/pop/popmw"
+	popmw "github.com/gobuffalo/buffalo-pop/pop/popmw"
 	contenttype "github.com/gobuffalo/mw-contenttype"
 	"github.com/rs/cors"
 )
