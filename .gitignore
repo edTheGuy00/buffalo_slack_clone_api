@@ -12,3 +12,4 @@ slack_clone_backend
 .vscode/
 .grifter/
 .env
+key.json

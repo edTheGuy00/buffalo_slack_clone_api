@@ -1,0 +1,70 @@
+---
+apiVersion: "v1"
+kind: "ConfigMap"
+metadata:
+  name: "slack-clone-deployment-config"
+  namespace: "default"
+  labels:
+    app: "slack-clone-deployment"
+data:
+  JWT_SECRET: "superPassword"
+---
+apiVersion: "extensions/v1beta1"
+kind: "Deployment"
+metadata:
+  name: "slack-clone-deployment"
+  namespace: "default"
+  labels:
+    app: "slack-clone-deployment"
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: "slack-clone-deployment"
+  template:
+    metadata:
+      labels:
+        app: "slack-clone-deployment"
+    spec:
+      containers:
+      - name: "slackclone-sha256"
+        image: "asia.gcr.io/ordinal-ember-213201/slackclone@sha256:8fb7e5304cdcd97a6787647381340d2c496d390006ac3b8dd136ff29d5a5f2c4"
+        env:
+        - name: "JWT_SECRET"
+          valueFrom:
+            configMapKeyRef:
+              key: "JWT_SECRET"
+              name: "slack-clone-deployment-config"
+      - name: "gce-proxy"
+        image: "gcr.io/cloudsql-docker/gce-proxy:1.11"
+        command: ["/cloud_sql_proxy",
+                  "-instances=ordinal-ember-213201:us-central1:slack-clone=tcp:127.0.0.1:5432",
+                  "-credential_file=/secrets/cloudsql/credentials.json"]
+        volumeMounts:
+          - name: my-secrets-volume
+            mountPath: /secrets/cloudsql
+            readOnly: true
+      volumes:
+        - name: my-secrets-volume
+          secret:
+            secretName: cloudsql-instance-credentials
+---
+apiVersion: "autoscaling/v2beta1"
+kind: "HorizontalPodAutoscaler"
+metadata:
+  name: "slack-clone-deployment-hpa"
+  namespace: "default"
+  labels:
+    app: "slack-clone-deployment"
+spec:
+  scaleTargetRef:
+    kind: "Deployment"
+    name: "slack-clone-deployment"
+    apiVersion: "apps/v1beta1"
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: "Resource"
+    resource:
+      name: "cpu"
+      targetAverageUtilization: 80

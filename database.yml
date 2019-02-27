@@ -1,8 +1,8 @@
 development:
   dialect: postgres
-  database: slack_clone_backend_development
+  database: slack_clone_backend_production
   user: postgres
-  password: postgres
+  password: slacker
   host: 127.0.0.1
   pool: 5
 
@@ -10,4 +10,4 @@ test:
   url: {{envOr "TEST_DATABASE_URL" "postgres://postgres:postgres@127.0.0.1:5432/slack_clone_backend_test?sslmode=disable"}}
 
 production:
-  url: {{envOr "DATABASE_URL" "postgres://postgres:postgres@127.0.0.1:5432/slack_clone_backend_production?sslmode=disable"}}
+  url: {{envOr "DATABASE_URL" "postgres://postgres:slacker@127.0.0.1:5432/slack_clone_backend_production?sslmode=disable"}}
