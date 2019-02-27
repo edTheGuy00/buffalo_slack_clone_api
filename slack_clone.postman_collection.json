@@ -1,0 +1,261 @@
+{
+	"info": {
+		"_postman_id": "72114c0a-052b-4dbc-b593-1b82638ac69f",
+		"name": "go_buffalo_test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "New User",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"email\": \"myMail@mail.com\",\n\t\"first_name\": \"Bob\",\n\t\"last_name\": \"Bob's last name\",\n\t\"user_name\": \"bob22\",\n\t\"password\": \"password\",\n\t\"password_confirmation\": \"password\"\n}"
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/users",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"users"
+					]
+				},
+				"description": "create a new user"
+			},
+			"response": []
+		},
+		{
+			"name": "base",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{BASE_URL}}",
+					"host": [
+						"{{BASE_URL}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Teams",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/teams",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"teams"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Team",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Bob's Second Team\"\n}"
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/teams",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"teams"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Team Members",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/teams/28eb8278-6b84-4398-a4cd-9d129f56b7a7/team_members",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"teams",
+						"28eb8278-6b84-4398-a4cd-9d129f56b7a7",
+						"team_members"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Team Channels",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/teams/28eb8278-6b84-4398-a4cd-9d129f56b7a7/channels",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"teams",
+						"28eb8278-6b84-4398-a4cd-9d129f56b7a7",
+						"channels"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Team Channels",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Memes\",\n\t\"public\": true\n}"
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/teams/28eb8278-6b84-4398-a4cd-9d129f56b7a7/channels",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"teams",
+						"28eb8278-6b84-4398-a4cd-9d129f56b7a7",
+						"channels"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "054a8cc5-8a2c-4aa8-b2d2-b08adf648d21",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "95aa09ad-90e2-44a6-a9cf-aa118901b076",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "43177e5e-8bc5-4fbd-b152-9e24009c7150",
+			"key": "BASE_URL",
+			"value": "localhost:3000",
+			"type": "string"
+		}
+	]
+}
